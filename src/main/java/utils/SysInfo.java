@@ -1,5 +1,6 @@
 package utils;
 
+import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -8,9 +9,9 @@ import frontend.UserDataImpl;
 public class SysInfo implements Runnable{
 	private Runtime runtime = Runtime.getRuntime();
 	private String lastDate;
+    private int shouldLoop = 1;
 	private static Map<String, String> data =
 			new HashMap<String, String>();
-
 	public SysInfo(){
 		data.put("MemoryUsage", "/statistic/memoryUsage");
 		data.put("TotalMemory", "/statistic/totalMemory");
@@ -38,8 +39,9 @@ public class SysInfo implements Runnable{
 				VFS.writeToFile(data.get(service), String.valueOf(UserDataImpl.ccu()));
 			}
 		}
-		while (true){
+		for (int i = 0; i < shouldLoop; i++){
 			TimeHelper.sleep(10000);
+            i = shouldLoop == 1? 0 : i;
 			for(String service:data.keySet()){
 				lastDate=TimeHelper.getTime();
 				if(service.equals("MemoryUsage")){

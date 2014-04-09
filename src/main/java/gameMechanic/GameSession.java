@@ -412,31 +412,19 @@ public class GameSession{
 	}
 	
 	private boolean canMoveRightUp(int x, int y){
-		if((y<settings.getFieldSize()-1)&&(x<settings.getFieldSize()-1)&&fieldIsEmpty(x+1, y+1))
-			return true;
-		else
-			return false;
+        return (y < settings.getFieldSize() - 1) && (x < settings.getFieldSize() - 1) && fieldIsEmpty(x + 1, y + 1);
 	}
 	
 	private boolean canMoveRightDown(int x, int y){
-		if((y>0)&&(x<settings.getFieldSize()-1)&&fieldIsEmpty(x+1, y-1))
-			return true;
-		else
-			return false;
+        return (y > 0) && (x < settings.getFieldSize() - 1) && fieldIsEmpty(x + 1, y - 1);
 	}
 	
 	private boolean canMoveLeftUp(int x, int y){
-		if((y<settings.getFieldSize()-1)&&(x>0)&&fieldIsEmpty(x-1, y+1))
-			return true;
-		else
-			return false;
+        return (y < settings.getFieldSize() - 1) && (x > 0) && fieldIsEmpty(x - 1, y + 1);
 	}
 	
 	private boolean canMoveLeftDown(int x, int y){
-		if((y>0)&&(x>0)&&fieldIsEmpty(x-1, y-1))
-			return true;
-		else
-			return false;
+        return (y > 0) && (x > 0) && fieldIsEmpty(x - 1, y - 1);
 	}
 	
 	private boolean canMove(int x, int y){

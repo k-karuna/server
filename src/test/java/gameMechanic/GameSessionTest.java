@@ -69,8 +69,12 @@ public class GameSessionTest {
         f.setAccessible(true);
         f.set(gs, "test");
         f.setAccessible(false);
+        File a = new File("log");
+        a.mkdir();
         String path = "log/AI";
         File file = new File(path);
+        file.mkdir();
+
         for (File f1 : file.listFiles())
             f1.delete();
         gs.saveLog(1);
@@ -180,11 +184,173 @@ public class GameSessionTest {
         GameSession gs = new GameSession(1,2,8,3);
         Method m = GameSession.class.getDeclaredMethod("canMove", Field.checker.class);
         m.setAccessible(true);
+        java.lang.reflect.Field f = GameSession.class.getDeclaredField("currentPositions");
+        f.setAccessible(true);
+        Field[][] fs = (Field[][])f.get(gs);
+        fs[4][7] = new Field(Field.checker.white);
+        f.set(gs, fs);
         Assert.assertTrue((Boolean) m.invoke(gs, Field.checker.black));
+        fs[2][2] = new Field(Field.checker.black);
+
+        f.set(gs, fs);
+        f.setAccessible(false);
+        Assert.assertTrue((Boolean) m.invoke(gs, Field.checker.white));
         gs = new GameSession(1,2,3,3);
         Assert.assertFalse((Boolean) m.invoke(gs, Field.checker.white));
-
-
+        m.setAccessible(false);
 
     }
+
+    @Test
+    public void testWhiteLose() throws Exception {
+        GameSession gs = new GameSession(1,2,8,3);
+        Method m = GameSession.class.getDeclaredMethod("whiteLose");
+        m.setAccessible(true);
+        Assert.assertFalse((Boolean) m.invoke(gs));
+        java.lang.reflect.Field f = GameSession.class.getDeclaredField("whiteQuantity");
+        f.setAccessible(true);
+        f.set(gs,0);
+        f.setAccessible(false);
+        Assert.assertTrue((Boolean) m.invoke(gs));
+        gs = new GameSession(1,2,3,3);
+        Assert.assertTrue((Boolean) m.invoke(gs));
+        gs = new GameSession(1,2,1,3);
+        Assert.assertTrue((Boolean) m.invoke(gs));
+        m.setAccessible(false);
+
+    }
+
+    @Test
+    public void testBlackLose() throws Exception {
+        GameSession gs = new GameSession(1,2,8,3);
+        Method m = GameSession.class.getDeclaredMethod("blackLose");
+        m.setAccessible(true);
+        Assert.assertFalse((Boolean) m.invoke(gs));
+        java.lang.reflect.Field f = GameSession.class.getDeclaredField("blackQuantity");
+        f.setAccessible(true);
+        f.set(gs,0);
+        f.setAccessible(false);
+        Assert.assertTrue((Boolean) m.invoke(gs));
+        gs = new GameSession(1,2,3,3);
+        Assert.assertTrue((Boolean) m.invoke(gs));
+        f = GameSession.class.getDeclaredField("currentPositions");
+        f.setAccessible(true);
+        Field[][] fs = (Field[][])f.get(gs);
+        fs[0][0] = new Field(Field.checker.black);
+        f.set(gs, fs);
+        f.setAccessible(false);
+        Assert.assertTrue((Boolean) m.invoke(gs));
+        m.setAccessible(false);
+    }
+
+    @Test
+    public void testNormal() throws Exception {
+        GameSession gs = new GameSession(1,2,8,3);
+        Method m = GameSession.class.getDeclaredMethod("normal", Integer.TYPE);
+        m.setAccessible(true);
+        Assert.assertEquals(m.invoke(gs, 0), 0);
+        Assert.assertEquals( m.invoke(gs, -5),-1);
+        m.setAccessible(false);
+
+    }
+
+    @Test
+    public void testInBorder() throws Exception {
+        GameSession gs = new GameSession(1,2,8,3);
+        Method m = GameSession.class.getDeclaredMethod("inBorder", Integer.TYPE);
+        m.setAccessible(true);
+        Assert.assertFalse((Boolean) m.invoke(gs, 15));
+        Assert.assertFalse( (Boolean)m.invoke(gs, -5));
+        Assert.assertTrue((Boolean) m.invoke(gs, 1));
+        m.setAccessible(false);
+
+    }
+
+    @Test
+    public void testStandartCheck() throws Exception {
+                GameSession gs = new GameSession(1,2,8,3);
+        Method m = GameSession.class.getDeclaredMethod("standartCheck", Integer.TYPE,Integer.TYPE,
+                Integer.TYPE,Integer.TYPE);
+        m.setAccessible(true);
+        Assert.assertFalse( (Boolean)m.invoke(gs, 1, 4, 1, 3));
+        Assert.assertFalse( (Boolean)m.invoke(gs, 1, 3, 1, 4));
+        Assert.assertFalse( (Boolean)m.invoke(gs, 1, 4, 1, 4));
+        Assert.assertFalse( (Boolean)m.invoke(gs, -1, 1, 3, 3));
+        Assert.assertFalse( (Boolean)m.invoke(gs, 1, -1, 3, 3));
+        Assert.assertFalse( (Boolean)m.invoke(gs, 1, 1, -3, 3));
+        Assert.assertFalse( (Boolean)m.invoke(gs, 1, 1, 3, -3));
+        Assert.assertFalse( (Boolean)m.invoke(gs, 0, 0, 2, 2));
+        m.setAccessible(false);
+
+    }
+
+    @Test
+    public void testChecking() throws Exception {
+        GameSession gs = new GameSession(1,2,8,3);
+        Method m = GameSession.class.getDeclaredMethod("checking", Integer.TYPE,Integer.TYPE,
+                Integer.TYPE,Integer.TYPE, Integer.TYPE);
+        m.setAccessible(true);
+        Assert.assertFalse( (Boolean)m.invoke(gs,2, 1, 4, 1, 3));
+        Assert.assertFalse( (Boolean)m.invoke(gs,1, 1, 4, 1, 3));
+        Assert.assertFalse( (Boolean)m.invoke(gs, 1, 1, 7, 1, 3));
+        Assert.assertTrue((Boolean) m.invoke(gs, 1, 0, 2, 1, 3));
+
+        m.setAccessible(false);
+
+    }
+
+    @Test
+    public void testBecameKing() throws Exception {
+        GameSession gs = new GameSession(1,2,8,3);
+        Method m = GameSession.class.getDeclaredMethod("becameKing", Integer.TYPE,Integer.TYPE);
+        m.setAccessible(true);
+        Assert.assertFalse( (Boolean)m.invoke(gs,0, 1));
+        Assert.assertFalse( (Boolean)m.invoke(gs,0, 0));
+        Assert.assertFalse( (Boolean)m.invoke(gs, 1, 7));
+        java.lang.reflect.Field f = GameSession.class.getDeclaredField("currentPositions");
+        f.setAccessible(true);
+        Field[][] fs = (Field[][])f.get(gs);
+        fs[0][0] = new Field(Field.checker.black);
+        f.set(gs, fs);
+        Assert.assertTrue((Boolean) m.invoke(gs, 0, 0));
+        fs[7][1] = new Field(Field.checker.white);
+        f.set(gs, fs);
+        Assert.assertTrue((Boolean) m.invoke(gs, 1, 7));
+        f.setAccessible(false);
+        m.setAccessible(false);
+
+    }
+
+    @Test
+    public void testBlackWin() throws Exception {
+        GameSession gs = new GameSession(1,2,8,3);
+        Method m = GameSession.class.getDeclaredMethod("blackWin", Long.TYPE);
+        m.setAccessible(true);
+        Assert.assertFalse( (Boolean)m.invoke(gs, 1));
+        Assert.assertTrue((Boolean) m.invoke(gs, 99999999999l));
+        java.lang.reflect.Field f = GameSession.class.getDeclaredField("lastStroke");
+        f.setAccessible(true);
+        f.set(gs,1);
+        Assert.assertFalse( (Boolean)m.invoke(gs, 1));
+        Assert.assertFalse( (Boolean)m.invoke(gs, 99999999999l));
+        f.setAccessible(false);
+        m.setAccessible(false);
+    }
+
+    @Test
+    public void testWhiteWin() throws Exception {
+        GameSession gs = new GameSession(1,2,8,3);
+        Method m = GameSession.class.getDeclaredMethod("whiteWin", Long.TYPE);
+        m.setAccessible(true);
+        Assert.assertFalse( (Boolean)m.invoke(gs, 1));
+        Assert.assertFalse((Boolean) m.invoke(gs, 99999999999l));
+        java.lang.reflect.Field f = GameSession.class.getDeclaredField("lastStroke");
+        f.setAccessible(true);
+        f.set(gs,1);
+        Assert.assertFalse( (Boolean)m.invoke(gs, 1));
+        Assert.assertTrue((Boolean) m.invoke(gs, 99999999999l));
+        f.setAccessible(false);
+        m.setAccessible(false);
+    }
+
 }
