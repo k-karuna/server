@@ -8,6 +8,9 @@ import utils.VFS;
 import java.io.File;
 import java.lang.reflect.Method;
 
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.when;
+
 /**
 
  * User: lena
@@ -16,6 +19,8 @@ import java.lang.reflect.Method;
 
  */
 public class GameSessionTest {
+
+    GameSession gameSession;
 
     @Test
     public void testGetPlayerColor() throws Exception {
@@ -353,4 +358,100 @@ public class GameSessionTest {
         m.setAccessible(false);
     }
 
+    @Test
+    public void testCheckOtherEatingOpportunity() throws Exception {
+
+        GameSession gameSession = new GameSession(1, 2);
+        Assert.assertEquals(false, gameSession.checkOtherEatingOpportunity(0, -1, 1, 1, 2, 3));
+        Assert.assertEquals(true, gameSession.checkOtherEatingOpportunity(2, 2, 0, 0, 3, 3));
+    }
+
+    @Test
+    public void testKingEatRightUp() {
+
+        GameSession gameSession = new GameSession(1, 2);
+        Assert.assertEquals(false, gameSession.kingCanEatRightUp(1, 1));
+        gameSession.move(1, 1, 5, 5);
+        Assert.assertEquals(false, gameSession.kingCanEatRightUp(4, 6));
+        Assert.assertEquals(false, gameSession.kingCanEatRightUp(4, 4));
+
+    }
+
+    @Test
+    public void testKingCanEatLeftUp() {
+        GameSession gameSession = new GameSession(1, 2);
+        gameSession.move(1, 1, 5, 5);
+        Assert.assertEquals(false, gameSession.kingCanEatLeftUp(3, 5));
+        Assert.assertEquals(false, gameSession.kingCanEatLeftUp(0, 0));
+        gameSession.getField(0, 0).setType(Field.checker.black);
+        Assert.assertEquals(false, gameSession.kingCanEatLeftUp(0, 0));
+
+        gameSession.getField(0, 0).setType(Field.checker.white);
+        Assert.assertEquals(false, gameSession.kingCanEatLeftUp(0, 0));
+
+    }
+
+    @Test
+    public void testKingCanEatRightDown() {
+        GameSession gameSession = new GameSession(1, 2);
+        gameSession.getField(7, 1).setType(Field.checker.black);
+        gameSession.getField(0, 1).setType(Field.checker.black);
+        gameSession.getField(0, 0).setType(Field.checker.black);
+        Assert.assertEquals(false, gameSession.kingCanEatRightDown(7, 1));
+        Assert.assertEquals(false, gameSession.kingCanEatRightDown(0, 1));
+        Assert.assertEquals(false, gameSession.kingCanEatRightDown(0, 0));
+
+        gameSession.getField(0, 0).setType(Field.checker.white);
+        Assert.assertEquals(false, gameSession.kingCanEatRightDown(0, 0));
+
+    }
+
+    @Test
+    public void testKingCanEatLeftDown() {
+        GameSession gameSession = new GameSession(1, 2);
+        Assert.assertEquals(false, gameSession.kingCanEatRightDown(1, 1));
+
+    }
+
+    @Test
+    public void testCanEat() {
+        GameSession gameSession = new GameSession(1,2);
+        Assert.assertTrue(gameSession.canEat(7, 4));
+        gameSession.checkStroke(1, 6, 5, 7, 4);
+        Assert.assertTrue(gameSession.canEat(1, 4));
+        gameSession.checkStroke(2, 2, 5, 1, 4);
+        Assert.assertTrue(gameSession.canEat(5, 2));
+        gameSession.checkStroke(1, 7, 4, 5, 2);
+    }
+
+    @Test
+    public void testCheckEating() {
+        GameSession gameSession = new GameSession(1, 2);
+        Assert.assertTrue(gameSession.checkEating(2, 2, 3, 3));
+        gameSession.fieldIsKing(2, 2);
+        Assert.assertTrue(gameSession.checkKingOtherEating(2, 2, 3, 3));
+
+    }
+
+    @Test
+    public void testCheckStroke() {
+        GameSession gameSession = spy(new GameSession(1, 2));
+        when(gameSession.checkKingOtherEating( 1, 1, 2, 2)).thenReturn(Boolean.FALSE);
+        when(gameSession.fieldIsKing(1, 1)).thenReturn(Boolean.TRUE);
+        Boolean aBoolean = gameSession.checkEating( 1, 1, 2, 2);
+        Assert.assertTrue(gameSession.checkEating(1, 1, 2, 2));
+    }
+
+    @Test
+    public void testMakeUsualStroke() {
+        GameSession gameSession = new GameSession(1, 2);
+        Assert.assertEquals(true, gameSession.makeUsualStroke(0, 0, 0, 0));
+        Assert.assertEquals(false, gameSession.makeUsualStroke(0, 0, 0, 0));
+    }
+
+   @Test
+    public void testGetWinnerId() {
+       GameSession gameSession = new GameSession(1, 2);
+       Assert.assertEquals(0, gameSession.getWinnerId());
+   }
 }

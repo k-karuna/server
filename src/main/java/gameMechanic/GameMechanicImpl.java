@@ -70,7 +70,7 @@ public class GameMechanicImpl implements GameMechanic{
 		}
 	}
 
-	private void createGame(String sessionIdWhite, String sessionIdBlack, 
+	public void createGame(String sessionIdWhite, String sessionIdBlack,
 			Map<String, String> sessionIdToColor, Map<String, UserDataSet> users){
 		int userIdWhite=users.get(sessionIdWhite).getId();
 		int userIdBlack=users.get(sessionIdBlack).getId();
@@ -84,7 +84,7 @@ public class GameMechanicImpl implements GameMechanic{
 		createChat(sessionIdWhite, sessionIdBlack);
 	}
 
-	private void createChat(String sessionIdWhite, String sessionIdBlack){
+	public void createChat(String sessionIdWhite, String sessionIdBlack){
 		Address to = messageSystem.getAddressByName("GameChat");
 		MsgCreateChat msg = new MsgCreateChat(address,to,sessionIdWhite, sessionIdBlack);
 		messageSystem.putMsg(to, msg);
@@ -181,7 +181,7 @@ public class GameMechanicImpl implements GameMechanic{
 		messageSystem.putMsg(to, msg);
 	}
 	
-	private void removeDeadGames(){
+	public void removeDeadGames(){
 		Object[] keys=userIdToSession.keySet().toArray();
 		int count,winnerId;
 		GameSession gameSession;

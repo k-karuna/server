@@ -126,7 +126,7 @@ public class UserDataImpl implements UserData{
 			return sessionIdToChatWS.get(sessionId).getSession().getRemote();
 	}
 
-	private String getOldUserSessionId(int id){
+	public String getOldUserSessionId(int id){
 		for(String sessionId:logInUsers.keySet()){
 			if(logInUsers.get(sessionId).getId()==id)
 				return sessionId;
@@ -145,7 +145,7 @@ public class UserDataImpl implements UserData{
 		getUserSessionBySessionId(sessionId).setPostStatus(0);
 	}
 
-	private void createGames() {
+	public void createGames() {
 		Map<String,UserDataSet> sendMap = 
 				new ConcurrentHashMap<String, UserDataSet>();
 		String[] keys = Caster.castKeysToStrings(wantToPlay);
@@ -165,7 +165,7 @@ public class UserDataImpl implements UserData{
 		}
 	}
 
-	private void removeUser(String sessionId){
+	public void removeUser(String sessionId){
 		sessionIdToUserSession.remove(sessionId);
 		logInUsers.remove(sessionId);
 		wantToPlay.remove(sessionId);
@@ -179,7 +179,7 @@ public class UserDataImpl implements UserData{
 		messageSystem.putMsg(to, msg);
 	}
 
-	private void keepAlive(String sessionId){
+	public void keepAlive(String sessionId){
 		try{
 			if(sessionIdToWS.get(sessionId)!=null){
 				getWSBySessionId(sessionId).sendString("1");
@@ -190,7 +190,7 @@ public class UserDataImpl implements UserData{
 		}
 	}
 
-	private void checkUsers(int keepAlive){
+	public void checkUsers(int keepAlive){
 		for(String sessionId:sessionIdToUserSession.keySet()){
 			if(exitedUser(getUserSessionBySessionId(sessionId)))
 				removeUser(sessionId);
