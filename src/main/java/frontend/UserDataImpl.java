@@ -148,7 +148,7 @@ public class UserDataImpl implements UserData{
 	}
 
 	public void createGames() {
-		Map<String,UserDataSet> sendMap =
+		Map<String,UserDataSet> sendMap = 
 				new ConcurrentHashMap<String, UserDataSet>();
 		String[] keys = Caster.castKeysToStrings(wantToPlay);
 		int count;
