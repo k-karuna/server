@@ -36,9 +36,9 @@ public class UserDataImpl implements UserData{
 			new ConcurrentHashMap<String,UserDataSet>();
 	final private static Map<String,UserDataSet> wantToPlay =
 			new ConcurrentHashMap<String,UserDataSet>();
-	final private static Map<String,WebSocketImpl>sessionIdToWS = 
+	final private static Map<String,WebSocketImpl>sessionIdToWS =
 			new HashMap<String,WebSocketImpl>();
-	final private static Map<String,ChatWSImpl> sessionIdToChatWS = 
+	final private static Map<String,ChatWSImpl> sessionIdToChatWS =
 			new HashMap<String,ChatWSImpl>();
 	static private MessageSystem messageSystem;
 	final private Address address;
@@ -48,6 +48,8 @@ public class UserDataImpl implements UserData{
 		address=new Address();
 		messageSystem.addService(this,"UserData");
 	}
+
+
 
 	public Address getAddress(){
 		return address;
@@ -146,7 +148,7 @@ public class UserDataImpl implements UserData{
 	}
 
 	private void createGames() {
-		Map<String,UserDataSet> sendMap = 
+		Map<String,UserDataSet> sendMap =
 				new ConcurrentHashMap<String, UserDataSet>();
 		String[] keys = Caster.castKeysToStrings(wantToPlay);
 		int count;

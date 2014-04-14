@@ -31,7 +31,7 @@ public class FrontendImpl extends AbstractHandler implements Frontend{
 	private AtomicInteger creatorSessionId=new AtomicInteger();
 	final private Address address;
 	final private MessageSystem messageSystem;
-	enum status {nothing,haveCookie,haveCookieAndPost,waiting,ready}
+	public enum status {nothing,haveCookie,haveCookieAndPost,waiting,ready}
 
 	public FrontendImpl(MessageSystem msgSystem){
 		address=new Address();
@@ -63,7 +63,7 @@ public class FrontendImpl extends AbstractHandler implements Frontend{
 		}
 	}
 
-	private status getStatus(HttpServletRequest request,String target,status stat,String sessionId){
+	public status getStatus(HttpServletRequest request,String target,status stat,String sessionId){
 		if((stat.equals(status.haveCookie))&&(request.getMethod().equals("POST")))
 			stat=status.haveCookieAndPost;
 		if((stat.equals(status.haveCookie))&&(UserDataImpl.getUserSessionBySessionId(sessionId).getId()!=0))
@@ -85,12 +85,12 @@ public class FrontendImpl extends AbstractHandler implements Frontend{
 		response.setHeader("Expires", TimeHelper.getGMT());
 	}
 
-	private boolean inWeb(String target){
+	public boolean inWeb(String target){
 		return ((target.equals("/"))||(target.equals("/wait"))||(target.equals("/game"))||(target.equals("/profile"))
 				||(target.equals("/admin"))||(target.equals("/rules"))||(target.equals("/logout"))||(target.equals("/reg")));
 	}
 
-	private boolean isStatic(String target){
+	public boolean isStatic(String target){
 		if(target.length()<4)
 			return false;
 		else if(target.length()==4)
@@ -98,7 +98,7 @@ public class FrontendImpl extends AbstractHandler implements Frontend{
 		else return (((target.substring(0, 5)).equals("/img/"))||((target.substring(0, 5)).equals("/css/")));
 	}
 
-	private boolean newUser(String strSessionId, String strStartServerTime){
+	public boolean newUser(String strSessionId, String strStartServerTime){
 		return((strSessionId==null)||(strStartServerTime==null)
 				||(!UserDataImpl.checkServerTime(strStartServerTime))
 				||(!UserDataImpl.containsSessionId(strSessionId)));
@@ -124,7 +124,7 @@ public class FrontendImpl extends AbstractHandler implements Frontend{
 		}
 	}
 
-	private void onNothingStatus(String target,String strSessionId, UserDataSet userSession, String strStartServerTime,HttpServletResponse response){
+	public void onNothingStatus(String target,String strSessionId, UserDataSet userSession, String strStartServerTime,HttpServletResponse response){
 		boolean moved=false;
 		if (!target.equals("/")){
 			response.setStatus(HttpServletResponse.SC_MOVED_TEMPORARILY);
@@ -189,7 +189,7 @@ public class FrontendImpl extends AbstractHandler implements Frontend{
 		sendPage("wait.html",null,response);
 	}
 
-	private void onReadyStatus(String target, String sessionId, UserDataSet userSession,HttpServletResponse response){
+	public void onReadyStatus(String target, String sessionId, UserDataSet userSession,HttpServletResponse response){
 		if(target.equals("/")){
 			UserDataImpl.putLogInUser(sessionId, userSession);
 			sendPage("index.html",userSession,response);			

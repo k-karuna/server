@@ -24,6 +24,13 @@ public class DBServiceImpl implements DataAccessObject{
 		messageSystem.addService(this,"DBService");
 	}
 
+    public DBServiceImpl(MessageSystem msgSystem, Connection connection){
+        address=new Address();
+        messageSystem = msgSystem;
+        messageSystem.addService(this,"DBService");
+        this.connection = connection;
+    }
+
 	public MessageSystem getMessageSystem(){
 		return messageSystem;
 	}
@@ -82,7 +89,7 @@ public class DBServiceImpl implements DataAccessObject{
 	
 	public void run(){
 		try{
-			//			Driver driver = (Driver) Class.forName("org.sqlite.JDBC").newInstance();
+
 			Driver driver = (Driver) Class.forName("com.mysql.jdbc.Driver").newInstance();
 			DriverManager.registerDriver(driver);
 		}
