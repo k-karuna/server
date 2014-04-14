@@ -21,7 +21,7 @@ public class GameSession{
 	private int blackQuantity,whiteQuantity;
 	private int id=creatorId.incrementAndGet();
 	private long lastStrokeTime = TimeHelper.getCurrentTime();
-	private Field[][] currentPositions;
+	public Field[][] currentPositions;
 	private StringBuilder log = new StringBuilder();
 	final private GameSettings settings;
 
@@ -122,14 +122,14 @@ public class GameSession{
 		return true;
 	}
 
-	private boolean checkEating(int from_x, int from_y, int to_x, int to_y){
+	public boolean checkEating(int from_x, int from_y, int to_x, int to_y){
 		if(!fieldIsKing(from_x, from_y))
 			return true;
 		else
 			return !checkKingOtherEating(from_x, from_y, to_x, to_y);
 	}
 	
-	private boolean checkKingOtherEating(int from_x, int from_y, int to_x, int to_y){
+	public boolean checkKingOtherEating(int from_x, int from_y, int to_x, int to_y){
 		checker anotherColor = getAnotherColor(getFieldType(from_x, from_y));
 		int on_x=normal(to_x-from_x), on_y=normal(to_y-from_y);
 		int x=from_x, y=from_y;
@@ -144,7 +144,7 @@ public class GameSession{
 		return ans;
 	}
 
-	private boolean checkOtherEatingOpportunityForField(int from_x, int from_y, int x, int y) {
+	public boolean checkOtherEatingOpportunityForField(int from_x, int from_y, int x, int y) {
 		Field wasField=new Field();
 		boolean ans=false;
 		wasField.make(getField(x,y));
@@ -156,7 +156,7 @@ public class GameSession{
 		return ans;
 	}
 
-	private boolean checkOtherEatingOpportunity(int x, int y, int from_x, int from_y, int to_x, int to_y){
+	public boolean checkOtherEatingOpportunity(int x, int y, int from_x, int from_y, int to_x, int to_y){
 		int on_x = normal(to_x-from_x), on_y=normal(to_y-from_y);
 		boolean ans=false;
 		for(x+=on_x,y+=on_y;inBorder(x)&&(inBorder(y));x+=on_x, y+=on_y){
@@ -167,7 +167,7 @@ public class GameSession{
 		return ans;
 	}
 	
-	private Field getField(int x, int y){
+	public Field getField(int x, int y){
 		return currentPositions[y][x];
 	}
 	
@@ -178,7 +178,7 @@ public class GameSession{
 			return checker.black;
 	}
 	
-	private boolean checking(int id,int from_x, int from_y, int to_x, int to_y){
+	public boolean checking(int id,int from_x, int from_y, int to_x, int to_y){
 		if(id==lastStroke){
 			System.err.println("false1");
 			return false;
@@ -195,7 +195,7 @@ public class GameSession{
 		return true;
 	}
 	
-	private boolean makeEatingStroke(int from_x, int from_y, int to_x, int to_y){
+	public boolean makeEatingStroke(int from_x, int from_y, int to_x, int to_y){
 		eat(from_x, from_y,to_x, to_y);
 		if(becameKing(to_x, to_y)){
 			makeKing(to_x, to_y);
@@ -203,7 +203,7 @@ public class GameSession{
 		return canEat(to_x,to_y);	
 	}
 	
-	private boolean makeUsualStroke(int from_x, int from_y, int to_x, int to_y){
+	public boolean makeUsualStroke(int from_x, int from_y, int to_x, int to_y){
 		checker myColor = getFieldType(from_x, from_y);
 		if(canEat(myColor)){
 			return false;
@@ -215,7 +215,7 @@ public class GameSession{
 		return true;
 	}
 	
-	private void makeKing(int x, int y){
+	public void makeKing(int x, int y){
 		currentPositions[y][x].makeKing();
 	}
 	
@@ -224,7 +224,7 @@ public class GameSession{
 		return ((myColor==checker.black)&&(y==0))||((myColor==checker.white)&&(y==settings.getFieldSize()-1));
 	}
 
-	private boolean fieldIsKing(int x, int y) {
+	public boolean fieldIsKing(int x, int y) {
 		return currentPositions[y][x].isKing();
 	}
 
@@ -232,7 +232,7 @@ public class GameSession{
 		return currentPositions[y][x].getType();
 	}
 
-	private boolean canEat(int x, int y){
+	public boolean canEat(int x, int y){
 		if(fieldIsKing(x,y))
 			return kingCanEat(x,y);
 		else
@@ -263,7 +263,7 @@ public class GameSession{
 		return pawnCanEatRightUp(x,y)||pawnCanEatLeftUp(x,y)||pawnCanEatRightDown(x,y)||pawnCanEatLeftDown(x,y);
 	}
 
-	private boolean kingCanEatRightUp(int x, int y){
+	public boolean kingCanEatRightUp(int x, int y){
 		checker myColor=getFieldType(x,y), anotherColor=getAnotherColor(myColor);
 		for(int counter=1;counter<settings.getFieldSize();counter++){
 			if((x+counter>=settings.getFieldSize()-2)||(y+counter>=settings.getFieldSize()-2)
@@ -276,7 +276,7 @@ public class GameSession{
 		return false;
 	}
 
-	private boolean kingCanEatLeftUp(int x, int y){
+	public boolean kingCanEatLeftUp(int x, int y){
 		checker myColor=getFieldType(x,y), anotherColor=getAnotherColor(myColor);
 		for(int counter=1;counter<settings.getFieldSize();counter++){
 			if((x-counter<=1)||(y+counter>=settings.getFieldSize()-2)
@@ -289,7 +289,7 @@ public class GameSession{
 		return false;
 	}
 
-	private boolean kingCanEatRightDown(int x, int y){
+	public boolean kingCanEatRightDown(int x, int y){
 		checker myColor=getFieldType(x,y), anotherColor=getAnotherColor(myColor);
 		for(int counter=1;counter<settings.getFieldSize();counter++){
 			if((x+counter>=settings.getFieldSize()-2)||(y+counter<=1)
@@ -304,7 +304,7 @@ public class GameSession{
 		return false;
 	}
 
-	private boolean kingCanEatLeftDown(int x, int y){
+	public boolean kingCanEatLeftDown(int x, int y){
 		checker myColor=getFieldType(x,y), anotherColor=getAnotherColor(myColor);
 		for(int counter=1;counter<settings.getFieldSize();counter++){
 			if((x-counter<=1)||(y-counter<=1)||(getFieldType(x-counter,y-counter)==myColor))
@@ -329,7 +329,7 @@ public class GameSession{
 		return false;
 	}
 
-	private void move(int from_x, int from_y, int to_x, int to_y){
+	public void move(int from_x, int from_y, int to_x, int to_y){
 		currentPositions[to_y][to_x].make(currentPositions[from_y][from_x]);
 		clearField(from_x,from_y);
 	}
@@ -402,7 +402,7 @@ public class GameSession{
 		return (getFieldType(from_x+on_x,from_y+on_y)==anotherColor)&&fieldIsEmpty(to_x,to_y);
 	}
 	
-	private boolean eating(int from_x, int from_y, int to_x, int to_y){
+	public boolean eating(int from_x, int from_y, int to_x, int to_y){
 		if((abs(from_x-to_x)<2)||(abs(from_y-to_y)<2))
 			return false;
 		if(fieldIsKing(from_x, from_y))
@@ -412,31 +412,19 @@ public class GameSession{
 	}
 	
 	private boolean canMoveRightUp(int x, int y){
-		if((y<settings.getFieldSize()-1)&&(x<settings.getFieldSize()-1)&&fieldIsEmpty(x+1, y+1))
-			return true;
-		else
-			return false;
+        return (y < settings.getFieldSize() - 1) && (x < settings.getFieldSize() - 1) && fieldIsEmpty(x + 1, y + 1);
 	}
 	
 	private boolean canMoveRightDown(int x, int y){
-		if((y>0)&&(x<settings.getFieldSize()-1)&&fieldIsEmpty(x+1, y-1))
-			return true;
-		else
-			return false;
+        return (y > 0) && (x < settings.getFieldSize() - 1) && fieldIsEmpty(x + 1, y - 1);
 	}
 	
 	private boolean canMoveLeftUp(int x, int y){
-		if((y<settings.getFieldSize()-1)&&(x>0)&&fieldIsEmpty(x-1, y+1))
-			return true;
-		else
-			return false;
+        return (y < settings.getFieldSize() - 1) && (x > 0) && fieldIsEmpty(x - 1, y + 1);
 	}
 	
 	private boolean canMoveLeftDown(int x, int y){
-		if((y>0)&&(x>0)&&fieldIsEmpty(x-1, y-1))
-			return true;
-		else
-			return false;
+        return (y > 0) && (x > 0) && fieldIsEmpty(x - 1, y - 1);
 	}
 	
 	private boolean canMove(int x, int y){

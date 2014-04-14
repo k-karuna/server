@@ -2,6 +2,7 @@ package frontend;
 
 import java.util.Map;
 
+import messageSystem.MessageSystemImpl;
 import org.eclipse.jetty.websocket.api.WebSocketAdapter;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -24,8 +25,10 @@ public class WebSocketImpl  extends WebSocketAdapter implements WebSocket{
 
 	public WebSocketImpl(boolean useMS){
 		address=new Address();
-		if(useMS)
+		if(useMS) {
+            messageSystem = new MessageSystemImpl();
 			messageSystem.addService(this,"WebSocket");
+        }
 	}
 
 	public WebSocketImpl(){
@@ -43,7 +46,7 @@ public class WebSocketImpl  extends WebSocketAdapter implements WebSocket{
 	@Override
 	public void onWebSocketText(String message) {
 		if (isNotConnected()) {
-			return; 
+			return;
 		}
 		String sessionId=null,startServerTime=null;
 		int from_x=-1, from_y=-1, to_x=-1, to_y=-1;
@@ -64,7 +67,7 @@ public class WebSocketImpl  extends WebSocketAdapter implements WebSocket{
 		}
 		catch (Exception ignor){
 		}
-		if((from_x!=-1)&&(from_y!=-1)&&(to_x!=-1)&&(to_y!=-1)&&(sessionId!=null)&&
+		if((from_x!=-1)&&(from_y!=-1)&&(to_x!=-1)&&(to_y!=-1)&&(!sessionId.equals("null"))&&
 				(UserDataImpl.checkServerTime(startServerTime))){
 			checkStroke(sessionId, to_x, to_y, from_x, from_y, status);
 		}
@@ -73,7 +76,7 @@ public class WebSocketImpl  extends WebSocketAdapter implements WebSocket{
 		}
 	}
 
-	private void addNewWS(String sessionId){
+	public void addNewWS(String sessionId){
 		UserDataSet userSession = UserDataImpl.getLogInUserBySessionId(sessionId);
 		if(userSession!=null){
 			userSession.visit();
@@ -81,7 +84,7 @@ public class WebSocketImpl  extends WebSocketAdapter implements WebSocket{
 		}
 	}
 
-	private void checkStroke(String sessionId, int to_x, int to_y, int from_x, int from_y, String status){
+	public void checkStroke(String sessionId, int to_x, int to_y, int from_x, int from_y, String status){
 		Stroke stroke=new Stroke(to_x,to_y,from_x,from_y,status);
 		UserDataSet userSession = UserDataImpl.getLogInUserBySessionId(sessionId);
 		userSession.visit();
@@ -116,7 +119,6 @@ public class WebSocketImpl  extends WebSocketAdapter implements WebSocket{
 		String color, black="{\"color\":\"black\"}",white="{\"color\":\"white\"}";
 		for(String sessionId:usersToColors.keySet()){
 			try{
-				color=usersToColors.get(sessionId);
 				userSession=UserDataImpl.getLogInUserBySessionId(sessionId);
 				color=usersToColors.get(sessionId);
 				if(color=="black"){
