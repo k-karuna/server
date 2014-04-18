@@ -115,6 +115,5 @@ public class FrontendImplTest {
     @Test
     public void testOnReadyStatus () {
         FrontendImpl frontend = new FrontendImpl(new MessageSystemImpl());
-        mockResponse
     }
 }

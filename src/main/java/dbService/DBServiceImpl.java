@@ -26,7 +26,19 @@ public class DBServiceImpl implements DataAccessObject{
 
     public DBServiceImpl(MessageSystem msgSystem, Connection connection){
         address=new Address();
-        messageSystem = msgSystem;
+        messageSystem = msgSystem;/*    @Test
+    public void testGetOldUserSessionId() {
+        idFirst = 34;
+        sessionIdFirst = "23467987543";
+        UserDataSet userDataSet = mock(UserDataSet.class);
+        when(userDataSet.getId()).thenReturn(idFirst);
+        userDataImpl.putLogInUser(sessionIdFirst, userDataSet);
+        userDataImpl.putSessionIdAndUserSession(sessionIdFirst, userDataSet);
+
+        sessionIdSecond = "56789098765434";
+        userDataImpl.putLogInUser(sessionIdSecond, userDataSet);
+        Assert.assertEquals(sessionIdFirst, userDataImpl.getOldUserSessionId(idFirst));
+    }*/
         messageSystem.addService(this,"DBService");
         this.connection = connection;
     }
