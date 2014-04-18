@@ -74,6 +74,7 @@ public class DBServiceImplTest {
         try{
             Connection connection = DriverManager.getConnection(url);
             DBServiceImpl dbService = new DBServiceImpl(messageSystem, connection);
+            dbService.addUDS("Karuna", "yecgaa");
             UserDataSet userDataSet = dbService.getUDS("Karuna", "yecgaa");
             Assert.assertNotNull(userDataSet);
         }
