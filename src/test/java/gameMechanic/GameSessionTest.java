@@ -476,4 +476,56 @@ public class GameSessionTest {
        GameSession gameSession = new GameSession(1, 2);
        Assert.assertEquals(0, gameSession.getWinnerId());
    }
+
+    @Test
+    public void testPawnEat() {
+        GameSession gameSession = new GameSession(1, 2);
+        gameSession.getField(3, 3).setType(Field.checker.black);
+        gameSession.getField(2, 2).setType(Field.checker.white);
+        gameSession.getField(2, 2).makeKing();
+
+        Assert.assertFalse(gameSession.checkStroke(1, 2, 5, 4, 3));
+    }
+
+    @Test
+    public void testPawnStrokeOrCanEat() {
+        GameSession gameSession = new GameSession(1, 2);
+        gameSession.getField(3, 3).setType(Field.checker.black);
+        gameSession.getField(2, 2).setType(Field.checker.white);
+        gameSession.getField(6, 0).setType(Field.checker.white);
+
+        Assert.assertFalse(gameSession.checkStroke(1, 0, 1, 1, 0));
+    }
+
+    @Test
+    public void testPawnLeftBottomEat() {
+        GameSession gameSession = new GameSession(1, 2);
+        gameSession.getField(3, 3).setType(Field.checker.white);
+        gameSession.getField(2, 2).setType(Field.checker.black);
+
+        Assert.assertFalse(gameSession.checkStroke(1, 3, 4, 1, 6));
+    }
+
+    @Test
+    public void testPawnRightBottomEat() {
+        GameSession gameSession = new GameSession(1, 2);
+        gameSession.getField(3, 3).setType(Field.checker.white);
+        gameSession.getField(2, 4).setType(Field.checker.black);
+
+        Assert.assertFalse(gameSession.checkStroke(1, 3, 4, 5, 6));
+    }
+
+    @Test
+    public void testKingStrokeRightTop() {
+        GameSession gameSession = new GameSession(1, 2);
+        gameSession.getField(1, 3).setType(Field.checker.white);
+        gameSession.getField(4, 6).setType(Field.checker.black);
+        gameSession.getField(1, 3).makeKing();
+
+        Assert.assertFalse(gameSession.checkStroke(1, 3, 6, 7, 2));
+    }
+
+
+
+
 }
