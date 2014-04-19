@@ -8,9 +8,7 @@ DROP SCHEMA IF EXISTS `checkers` ;
 CREATE SCHEMA IF NOT EXISTS `checkers` DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci ;
 USE `checkers` ;
 
--- -----------------------------------------------------
--- Table `checkers`.`Users`
--- -----------------------------------------------------
+
 DROP TABLE IF EXISTS `checkers`.`Users` ;
 
 CREATE  TABLE IF NOT EXISTS `checkers`.`Users` (
