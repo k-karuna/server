@@ -414,6 +414,28 @@ public class GameSessionTest {
     }
 
     @Test
+    public void canEatKingTopRightTest() {
+        GameSession gameSession = new GameSession(1, 2);
+        gameSession.getField(7, 6).setType(Field.checker.black);
+        gameSession.getField(6, 5).setType(Field.checker.white);
+        gameSession.getField(6, 5).makeKing();
+
+        Assert.assertFalse(gameSession.canEat(6, 5));
+
+        gameSession.getField(6, 7).setType(Field.checker.black);
+        gameSession.getField(5, 6).setType(Field.checker.white);
+        gameSession.getField(5, 6).makeKing();
+
+        Assert.assertFalse(gameSession.canEat(5, 6));
+
+        gameSession.getField(4, 5).setType(Field.checker.white);
+        gameSession.getField(3, 4).setType(Field.checker.white);
+        gameSession.getField(3, 4).makeKing();
+
+        Assert.assertFalse(gameSession.canEat(3, 4));
+    }
+
+    @Test
     public void testCanEat() {
         GameSession gameSession = new GameSession(1,2);
         Assert.assertTrue(gameSession.canEat(7, 4));
