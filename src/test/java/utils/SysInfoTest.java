@@ -19,15 +19,20 @@ import java.util.Map;
 
  */
 public class SysInfoTest {
+
+    public final String testFile = "statistic/ccu";
+    SysInfo sysInfo;
     @BeforeMethod
     public void setUp() throws Exception {
+        sysInfo = new SysInfo();
         new File("statistic/memoryUsage").delete();
         new File("statistic/totalMemory").delete();
         new File("statistic/time").delete();
         new File("statistic/ccu").delete();
 
     }
-   // @Test
+
+    @Test
     public void testRun() throws Exception {
         SysInfo info = new SysInfo();
 
@@ -50,5 +55,6 @@ public class SysInfoTest {
         Assert.assertEquals(new File("statistic/smth").exists(), false);
    //     thread.interrupt();
     }
+
 
 }
