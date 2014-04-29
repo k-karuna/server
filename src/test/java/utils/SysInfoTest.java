@@ -31,7 +31,6 @@ public class SysInfoTest {
         new File("statistic/ccu").delete();
 
     }
-
     @Test
     public void testRun() throws Exception {
         SysInfo info = new SysInfo();

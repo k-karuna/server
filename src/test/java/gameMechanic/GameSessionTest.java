@@ -525,7 +525,21 @@ public class GameSessionTest {
         Assert.assertFalse(gameSession.checkStroke(1, 3, 6, 7, 2));
     }
 
+    @Test
+    public void testCheckStrokeNew() {
 
+        GameSession gameSession = new GameSession(1, 2, 8, 3);
+        Assert.assertFalse( gameSession.checkStroke(1,7,6,8,5));
+        Assert.assertFalse(gameSession.checkStroke(1,1,2,0,3));
+        Assert.assertTrue(gameSession.checkStroke(1, 0, 5, 2, 3));
+
+        Assert.assertFalse(gameSession.checkStroke( 1, 0, 5, 0, 4));
+        Assert.assertFalse(gameSession.checkStroke( 1, 0, 5, 1, 5));
+        Assert.assertFalse(gameSession.checkStroke( 1, 1, 5, 0, 5));
+        Assert.assertFalse(gameSession.checkStroke(1, 0, 5, 0, 5));
+        Assert.assertFalse(gameSession.checkStroke(1, 0, 5, 1, 4));
+        Assert.assertFalse(gameSession.checkStroke(2, 0, 5, 1, 4));
+    }
 
 
 }

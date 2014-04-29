@@ -57,7 +57,7 @@ public class MsgToGameMechanicTest {
         
 
         @Override
-        public Map<String, String> createGames(Map<String, UserDataSet> users) {
+        public Map<String, String> createGames(Map<String, UserDataSet> users, boolean isChatEnabled) {
             return null;  
         }
 

@@ -140,7 +140,7 @@ public class FrontendImpl extends AbstractHandler implements Frontend{
 		}
 	}
 
-	private void onHaveCookieStatus(String target, UserDataSet userSession, HttpServletResponse response){
+	public void onHaveCookieStatus(String target, UserDataSet userSession, HttpServletResponse response){
 		if (target.equals("/")){
 			sendPage("index.html",userSession,response);
 		}
@@ -153,7 +153,7 @@ public class FrontendImpl extends AbstractHandler implements Frontend{
 		}
 	}
 
-	private void onHaveCookieAndPostStatus(String target, String sessionId,UserDataSet userSession,HttpServletRequest request, HttpServletResponse response){
+	public void onHaveCookieAndPostStatus(String target, String sessionId,UserDataSet userSession,HttpServletRequest request, HttpServletResponse response){
 		String nick=request.getParameter("nick");
 		String password = request.getParameter("password");
 		if ((nick==null)||(password==null)){
