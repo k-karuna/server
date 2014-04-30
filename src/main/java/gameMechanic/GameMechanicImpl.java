@@ -71,7 +71,7 @@ public class GameMechanicImpl implements GameMechanic{
 	}
 
 	public void createGame(String sessionIdWhite, String sessionIdBlack,
-			Map<String, String> sessionIdToColor, Map<String, UserDataSet> users){
+			Map<String, String> sessionIdToColor, Map<String, UserDataSet> users, boolean isChatEnabled){
 		int userIdWhite=users.get(sessionIdWhite).getId();
 		int userIdBlack=users.get(sessionIdBlack).getId();
 		GameSession gameSession=new GameSession(userIdWhite, userIdBlack);
@@ -81,7 +81,11 @@ public class GameMechanicImpl implements GameMechanic{
 		userIdToSession.put(userIdBlack, gameSession);
 		users.remove(sessionIdBlack);
 		users.remove(sessionIdWhite);
-		createChat(sessionIdWhite, sessionIdBlack);
+        if (isChatEnabled) {
+            createChat(sessionIdWhite, sessionIdBlack);
+        } else {
+            System.out.println("Chat is not available");
+        }
 	}
 
 	public void createChat(String sessionIdWhite, String sessionIdBlack){
@@ -99,7 +103,7 @@ public class GameMechanicImpl implements GameMechanic{
 		wantToPlay.put(sessionId, userSession);
 	}
 
-	public Map<String,String> createGames(Map<String,UserDataSet> users){
+	public Map<String,String> createGames(Map<String,UserDataSet> users, boolean isChatEnabled){
 		Map<String,String> sessionIdToColor=new HashMap<String,String>();
 		if(users.size()==0)
 			return sessionIdToColor;
@@ -118,7 +122,7 @@ public class GameMechanicImpl implements GameMechanic{
 				sessionIdBlack = keys[count*2+1];
 				sessionIdWhite = keys[count*2];
 			}
-			createGame(sessionIdWhite, sessionIdBlack,sessionIdToColor,users);
+			createGame(sessionIdWhite, sessionIdBlack,sessionIdToColor,users, isChatEnabled);
 		}
 		return sessionIdToColor;
 	}

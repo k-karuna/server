@@ -116,4 +116,13 @@ public class FrontendImplTest {
     public void testOnReadyStatus () {
         FrontendImpl frontend = new FrontendImpl(new MessageSystemImpl());
     }
+    @Test
+    public void testOnHaveCookieStatus() {
+        FrontendImpl frontend = spy(new FrontendImpl(new MessageSystemImpl()));
+        frontend.onHaveCookieStatus("/", new UserDataSet(), mockResponse);
+        //verify(frontend).onHaveCookieStatus("/", new UserDataSet(), mockResponse);
+        frontend.onHaveCookieStatus("/reg", new UserDataSet(), mockResponse);
+        frontend.onHaveCookieStatus("/nothingfromthis", new UserDataSet(), mockResponse);
+    }
+
 }

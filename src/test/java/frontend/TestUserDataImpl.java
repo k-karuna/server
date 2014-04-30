@@ -37,6 +37,7 @@ public class TestUserDataImpl {
     // Session session;
     int idFirst, idSecond, ratingFirst, ratingSecond;
     String sessionIdFirst, sessionIdSecond;
+    UserDataSet userDataSet;
 
 
     @BeforeTest
@@ -48,6 +49,7 @@ public class TestUserDataImpl {
         address = mock(Address.class);
         timeHelper = mock(TimeHelper.class);
         // session = mock(Session.class);
+        userDataSet = mock(UserDataSet.class);
     }
 
     @Test
@@ -220,6 +222,45 @@ public class TestUserDataImpl {
         userDataImpl.putSessionIdAndUserSession(sessionIdFirst, userDataSet);
         userDataImpl.checkUsers(1);
         userDataImpl.checkUsers(0);
+    }
+
+    @Test
+    public void testPartyEndWithNotEqRating() throws Exception {
+        when(userDataSet.getId()).thenReturn(777);
+        UserDataImpl.putSessionIdAndUserSession("sessionId", userDataSet);
+        UserDataImpl.putLogInUser("sessionId", userDataSet);
+        when(userDataSet.getRating()).thenReturn(666);
+
+        UserDataSet userDataSetNew = mock(UserDataSet.class);
+        when(userDataSetNew.getId()).thenReturn(888);
+        UserDataImpl.putSessionIdAndUserSession("sessionIdNew", userDataSetNew);
+        UserDataImpl.putLogInUser("sessionIdNew", userDataSetNew);
+        when(userDataSetNew.getRating()).thenReturn(228);
+        userDataImpl.partyEnd(888, 777);
+    }
+
+    @Test
+    public void testPartyEndWithEqRating() throws Exception {
+        when(userDataSet.getId()).thenReturn(777);
+        UserDataImpl.putSessionIdAndUserSession("sessionId", userDataSet);
+        UserDataImpl.putLogInUser("sessionId", userDataSet);
+
+        UserDataSet userDataSetNew = mock(UserDataSet.class);
+        when(userDataSetNew.getId()).thenReturn(888);
+        UserDataImpl.putSessionIdAndUserSession("sessionIdNew", userDataSetNew);
+        UserDataImpl.putLogInUser("sessionIdNew", userDataSetNew);
+        userDataImpl.partyEnd(888, 777);
+    }
+
+    @Test
+    public void testPartyEndWithNullSessions() throws Exception {
+        when(userDataSet.getId()).thenReturn(777);
+        UserDataImpl.putLogInUser("sessionId", userDataSet);
+
+        UserDataSet userDataSetNew = mock(UserDataSet.class);
+        when(userDataSetNew.getId()).thenReturn(888);
+        UserDataImpl.putLogInUser("sessionIdNew", userDataSetNew);
+        userDataImpl.partyEnd(888, 777);
     }
 
     @AfterTest
