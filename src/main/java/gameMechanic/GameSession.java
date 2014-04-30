@@ -555,4 +555,3 @@ public class GameSession{
 		return blackQuantity;
 	}
 }
-//Черная клетка, если координаты один. четности
