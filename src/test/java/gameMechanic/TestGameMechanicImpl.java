@@ -117,7 +117,7 @@ public class TestGameMechanicImpl {
     public void testOnePlayerOnly() throws Exception {
         users.remove("secondPlayer");
         sessionIdToColor = gameMechanic.createGames(users, false);
-        Assert.assertEquals(sessionIdToColor.size(), 0);    // нет сессии для одного игрока
+        Assert.assertEquals(sessionIdToColor.size(), 0);
     }
 
     @Test
@@ -147,7 +147,7 @@ public class TestGameMechanicImpl {
         }
 
         sessionIdToColor = gameMechanic.createGames(users, false);
-        Assert.assertEquals(sessionIdToColor.size(), 0);    // данная сессия уже сформирована
+        Assert.assertEquals(sessionIdToColor.size(), 0);
     }
 
     @Test
